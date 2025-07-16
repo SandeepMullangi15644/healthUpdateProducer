@@ -1,24 +1,20 @@
 package com.example.healthUpdateProducer.controller;
 
 import com.example.healthUpdateProducer.service.KafkaProducer;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/healthplans")
+@RequestMapping("/healthplans")
 public class KafkaController {
 
     @Autowired
     private KafkaProducer kafkaProducer;
 
     @PostMapping("/publish")
-    public String publishHealthPlan(@RequestBody Map<String, Object> updatedFields) {
-        kafkaProducer.sendHealthPlan(updatedFields);
+    public String publishHealthPlan(@RequestBody JsonNode healthPlanUpdate) {
+        kafkaProducer.sendHealthPlan(healthPlanUpdate);
         return "Health plan update sent to Kafka successfully!";
     }
 }
