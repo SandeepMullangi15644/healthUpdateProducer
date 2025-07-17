@@ -5,7 +5,6 @@ import com.example.healthUpdateProducer.model.Customers;
 import com.example.healthUpdateProducer.model.HealthPlans;
 import com.example.healthUpdateProducer.service.HealthBeneService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -28,6 +27,12 @@ public class HealthBeneController
     @GetMapping("/customers")
     public List<Customers> getAllCustomers(){return health_service.getCustomerData();}
 
+    @GetMapping("/email")
+    public Customers getCustomerByEmail(@RequestParam String email){
+        return health_service.getCustomerByEmail(email);
+
+    }
+
     @GetMapping("/health_plans")
     public List<HealthPlans> getAllHealthPlans()
     {
@@ -36,6 +41,12 @@ public class HealthBeneController
 
     @GetMapping("/cust_health_plans")
     public List<CustomerHealthPlans> getAllCustHealthPlans(){return health_service.getCustHealthPlanData();}
+
+
+    @GetMapping("/cust_health_plans/by-customer")
+    public List<CustomerHealthPlans> getCustHealthPlansByCustomerId(@RequestParam Integer customerId) {
+        return health_service.getCustHealthPlansByCustomerId(customerId);
+    }
 
     @GetMapping("/health_plans/{id}")
     public HealthPlans getHealthPlansById(@PathVariable Integer id){

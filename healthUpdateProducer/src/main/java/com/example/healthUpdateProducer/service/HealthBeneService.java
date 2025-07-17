@@ -26,6 +26,9 @@ public class HealthBeneService {
     public List<Customers> getCustomerData() {
         return cust_repo.findAll();
     }
+    public Customers getCustomerByEmail(String email){
+        return cust_repo.findByEmail(email).orElse(null);
+    }
 
     public List<HealthPlans> getHealthPlanData() {
         return health_plan_repo.findAll();
@@ -34,6 +37,13 @@ public class HealthBeneService {
     public List<CustomerHealthPlans> getCustHealthPlanData() {
         return cust_health_repo.findAll();
     }
+
+
+    public List<CustomerHealthPlans> getCustHealthPlansByCustomerId(Integer customerId) {
+        return cust_health_repo.getByCustomerId(customerId);
+    }
+
+
 
     public HealthPlans getHealthPlanById(Integer id){
         return health_plan_repo.findById(id).orElse(null);
