@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+@CrossOrigin("*")
 @RestController
 public class HealthBeneController
 {
@@ -27,8 +28,8 @@ public class HealthBeneController
     @GetMapping("/customers")
     public List<Customers> getAllCustomers(){return health_service.getCustomerData();}
 
-    @GetMapping("/email")
-    public Customers getCustomerByEmail(@RequestParam String email){
+    @GetMapping("/email/{email}")
+    public Customers getCustomerByEmail(@PathVariable String email){
         return health_service.getCustomerByEmail(email);
 
     }
@@ -43,14 +44,14 @@ public class HealthBeneController
     public List<CustomerHealthPlans> getAllCustHealthPlans(){return health_service.getCustHealthPlanData();}
 
 
-    @GetMapping("/cust_health_plans/by-customer")
-    public List<CustomerHealthPlans> getCustHealthPlansByCustomerId(@RequestParam Integer customerId) {
-        return health_service.getCustHealthPlansByCustomerId(customerId);
+    @GetMapping("/cust_health_plans/by-customer/{id}")
+    public List<CustomerHealthPlans> getCustHealthPlansByCustomerId(@PathVariable Integer id) {
+        return health_service.getCustHealthPlansByCustomerId(id);
     }
 
-    @GetMapping("/health_plans/{id}")
-    public HealthPlans getHealthPlansById(@PathVariable Integer id){
-        return health_service.getHealthPlanById(id);
+    @GetMapping("/health_plans/{ids}")
+    public List<HealthPlans> getHealthPlansById(@PathVariable String ids){
+        return health_service.getHealthPlansByIds(ids);
     }
 
 }

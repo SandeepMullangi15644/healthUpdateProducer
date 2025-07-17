@@ -7,10 +7,16 @@ import com.example.healthUpdateProducer.repository.CustomerHealthPlansRepository
 import com.example.healthUpdateProducer.repository.CustomerRepository;
 import com.example.healthUpdateProducer.repository.HealthPlansRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class HealthBeneService {
@@ -22,6 +28,9 @@ public class HealthBeneService {
 
     @Autowired
     HealthPlansRepository health_plan_repo;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     public List<Customers> getCustomerData() {
         return cust_repo.findAll();
@@ -42,11 +51,13 @@ public class HealthBeneService {
     public List<CustomerHealthPlans> getCustHealthPlansByCustomerId(Integer customerId) {
         return cust_health_repo.getByCustomerId(customerId);
     }
-
-
-
-    public HealthPlans getHealthPlanById(Integer id){
-        return health_plan_repo.findById(id).orElse(null);
+    public List<HealthPlans> getHealthPlansByIds(String ids) {
+        String[] str = ids.split(",");
+        List<Integer> intList = Arrays.stream(str).map(String::trim).map(Integer::parseInt).collect(Collectors.toList());
+            Query query = new Query();
+            query.addCriteria(Criteria.where("_id").in(intList));
+            return mongoTemplate.find(query, HealthPlans.class, "health_plans");
     }
+
 
 }
