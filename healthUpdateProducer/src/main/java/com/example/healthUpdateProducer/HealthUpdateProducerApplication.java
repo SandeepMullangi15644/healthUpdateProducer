@@ -1,5 +1,8 @@
 package com.example.healthUpdateProducer;
 
+import com.example.healthUpdateProducer.service.KafkaBatchProducerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +17,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-public class HealthUpdateProducerApplication {
+public class HealthUpdateProducerApplication implements CommandLineRunner {
+	@Autowired
+	private KafkaBatchProducerService service;
 
 	@Bean
 	public Docket api() {
@@ -32,6 +37,11 @@ public class HealthUpdateProducerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(HealthUpdateProducerApplication.class, args);
+
+	}
+	@Override
+	public void run(String... args) throws Exception{
+		service.sendBatch();
 	}
 
 }
